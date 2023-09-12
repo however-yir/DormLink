@@ -1,6 +1,7 @@
 package com.example.springboot.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.springboot.common.JwtUtil;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.DormManager;
 import com.example.springboot.entity.User;
@@ -10,7 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dormManager")
@@ -19,6 +21,9 @@ public class DormManagerController {
 
     @Resource
     private DormManagerService dormManagerService;
+
+    @Resource
+    private JwtUtil jwtUtil;
 
     /**
      * 宿管添加
@@ -78,14 +83,26 @@ public class DormManagerController {
      * 宿管登录
      */
     @PostMapping("/login")
-    public Result<?> login(@RequestBody User user, HttpSession session) {
-        Object o = dormManagerService.dormManagerLogin(user.getUsername(), user.getPassword());
-        if (o != null) {
+    public Result<?> login(@RequestBody User user) {
+        DormManager dormManager = dormManagerService.dormManagerLogin(user.getUsername(), user.getPassword());
+        if (dormManager != null) {
             log.info("Dorm manager login succeeded");
-            //存入session
-            session.setAttribute("Identity", "dormManager");
-            session.setAttribute("User", o);
-            return Result.success(o);
+            String token = jwtUtil.generateToken(
+                    dormManager.getUsername(),
+                    "dormManager",
+                    dormManager.getUsername(),
+                    dormManager.getName(),
+                    dormManager.getAvatar()
+            );
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("token", token);
+            payload.put("role", "dormManager");
+            payload.put("userId", dormManager.getUsername());
+            payload.put("username", dormManager.getUsername());
+            payload.put("displayName", dormManager.getName());
+            payload.put("avatar", dormManager.getAvatar());
+            payload.put("user", dormManager);
+            return Result.success(payload);
         } else {
             return Result.error("-1", "用户名或密码错误");
         }

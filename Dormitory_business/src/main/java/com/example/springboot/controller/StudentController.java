@@ -1,6 +1,7 @@
 package com.example.springboot.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.springboot.common.JwtUtil;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.Student;
 import com.example.springboot.entity.User;
@@ -10,7 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/stu")
@@ -19,6 +21,9 @@ public class StudentController {
 
     @Resource
     private StudentService studentService;
+
+    @Resource
+    private JwtUtil jwtUtil;
 
     /**
      * 添加学生信息
@@ -79,15 +84,27 @@ public class StudentController {
      * 学生登录
      */
     @PostMapping("/login")
-    public Result<?> login(@RequestBody User user, HttpSession session) {
+    public Result<?> login(@RequestBody User user) {
         log.debug("Student login attempt");
-        Object o = studentService.stuLogin(user.getUsername(), user.getPassword());
-        if (o != null) {
+        Student student = studentService.stuLogin(user.getUsername(), user.getPassword());
+        if (student != null) {
             log.info("Student login succeeded");
-            //存入session
-            session.setAttribute("Identity", "stu");
-            session.setAttribute("User", o);
-            return Result.success(o);
+            String token = jwtUtil.generateToken(
+                    student.getUsername(),
+                    "stu",
+                    student.getUsername(),
+                    student.getName(),
+                    student.getAvatar()
+            );
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("token", token);
+            payload.put("role", "stu");
+            payload.put("userId", student.getUsername());
+            payload.put("username", student.getUsername());
+            payload.put("displayName", student.getName());
+            payload.put("avatar", student.getAvatar());
+            payload.put("user", student);
+            return Result.success(payload);
         } else {
             return Result.error("-1", "用户名或密码错误");
         }
