@@ -31,3 +31,18 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# --- Common Codex ignores ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*.log
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+node_modules/
