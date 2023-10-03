@@ -5,12 +5,15 @@ import com.example.springboot.common.Result;
 import com.example.springboot.entity.AdjustRoom;
 import com.example.springboot.service.AdjustRoomService;
 import com.example.springboot.service.DormRoomService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/adjustRoom")
+@Tag(name = "AdjustRoom", description = "调宿申请接口")
 public class AdjustRoomController {
 
     @Resource
@@ -23,6 +26,7 @@ public class AdjustRoomController {
     /**
      * 添加订单
      */
+    @Operation(summary = "提交调宿申请")
     @PostMapping("/add")
     public Result<?> add(@RequestBody AdjustRoom adjustRoom) {
 
@@ -38,6 +42,7 @@ public class AdjustRoomController {
     /**
      * 更新订单
      */
+    @Operation(summary = "更新调宿申请状态")
     @PutMapping("/update/{state}")
     public Result<?> update(@RequestBody AdjustRoom adjustRoom, @PathVariable Boolean state) {
         if (state) {
@@ -59,6 +64,7 @@ public class AdjustRoomController {
     /**
      * 删除订单
      */
+    @Operation(summary = "删除调宿申请")
     @DeleteMapping("/delete/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         int i = adjustRoomService.deleteAdjustment(id);
@@ -72,6 +78,7 @@ public class AdjustRoomController {
     /**
      * 查找订单
      */
+    @Operation(summary = "分页查询调宿申请")
     @GetMapping("/find")
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,

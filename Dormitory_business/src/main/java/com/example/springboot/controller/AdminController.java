@@ -5,6 +5,8 @@ import com.example.springboot.common.Result;
 import com.example.springboot.entity.Admin;
 import com.example.springboot.entity.User;
 import com.example.springboot.service.AdminService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
+@Tag(name = "Admin", description = "管理员接口")
 public class AdminController {
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
 
@@ -27,6 +30,7 @@ public class AdminController {
     /**
      * 管理员登录
      */
+    @Operation(summary = "管理员登录", description = "登录成功返回 JWT Token 与用户信息")
     @PostMapping("/login")
     public Result<?> login(@RequestBody User user) {
         Admin admin = adminService.adminLogin(user.getUsername(), user.getPassword());
@@ -56,6 +60,7 @@ public class AdminController {
     /**
      * 管理员信息更新
      */
+    @Operation(summary = "更新管理员信息")
     @PutMapping("/update")
     public Result<?> update(@RequestBody Admin admin) {
         int i = adminService.updateAdmin(admin);

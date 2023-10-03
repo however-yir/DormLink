@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.Repair;
 import com.example.springboot.service.RepairService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/repair")
+@Tag(name = "Repair", description = "报修管理接口")
 public class RepairController {
     private static final Logger log = LoggerFactory.getLogger(RepairController.class);
 
@@ -21,6 +24,7 @@ public class RepairController {
     /**
      * 添加订单
      */
+    @Operation(summary = "创建报修单")
     @PostMapping("/add")
     public Result<?> add(@RequestBody Repair repair) {
         int i = repairService.addNewOrder(repair);
@@ -34,6 +38,7 @@ public class RepairController {
     /**
      * 更新订单
      */
+    @Operation(summary = "更新报修单")
     @PutMapping("/update")
     public Result<?> update(@RequestBody Repair repair) {
         int i = repairService.updateNewOrder(repair);
@@ -47,6 +52,7 @@ public class RepairController {
     /**
      * 删除订单
      */
+    @Operation(summary = "删除报修单")
     @DeleteMapping("/delete/{id}")
     public Result<?> delete(@PathVariable Integer id) {
         int i = repairService.deleteOrder(id);
@@ -60,6 +66,7 @@ public class RepairController {
     /**
      * 查找订单
      */
+    @Operation(summary = "分页查询报修单")
     @GetMapping("/find")
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
@@ -75,6 +82,7 @@ public class RepairController {
     /**
      * 个人申报报修 分页查询
      */
+    @Operation(summary = "按报修人分页查询报修单")
     @GetMapping("/find/{name}")
     public Result<?> individualFind(@RequestParam(defaultValue = "1") Integer pageNum,
                                     @RequestParam(defaultValue = "10") Integer pageSize,
@@ -92,6 +100,7 @@ public class RepairController {
     /**
      * 首页顶部：报修统计
      */
+    @Operation(summary = "报修总量统计")
     @GetMapping("/orderNum")
     public Result<?> orderNum() {
         int num = repairService.showOrderNum();
