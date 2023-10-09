@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: dormlink-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-12345678}
+      MYSQL_DATABASE: wms
+    ports:
+      - "3308:3306"
+    volumes:
+      - dormlink_mysql_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+  redis:
+    image: redis:7-alpine
+    container_name: dormlink-redis
+    ports:
+      - "6380:6379"
+
+volumes:
+  dormlink_mysql_data:

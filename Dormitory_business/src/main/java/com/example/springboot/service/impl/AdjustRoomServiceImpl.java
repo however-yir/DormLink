@@ -9,6 +9,8 @@ import com.example.springboot.service.AdjustRoomService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class AdjustRoomServiceImpl extends ServiceImpl<AdjustRoomMapper, AdjustRoom> implements AdjustRoomService {
@@ -22,6 +24,21 @@ public class AdjustRoomServiceImpl extends ServiceImpl<AdjustRoomMapper, AdjustR
      */
     @Override
     public int addApply(AdjustRoom adjustRoom) {
+        QueryWrapper<AdjustRoom> pendingQuery = new QueryWrapper<>();
+        pendingQuery.eq("username", adjustRoom.getUsername())
+                .eq("currentroom_id", adjustRoom.getCurrentRoomId())
+                .eq("towardsroom_id", adjustRoom.getTowardsRoomId())
+                .in("state", "未处理", "待处理", "申请中");
+        Long pendingCount = adjustRoomMapper.selectCount(pendingQuery);
+        if (pendingCount != null && pendingCount > 0) {
+            return 0;
+        }
+        if (adjustRoom.getState() == null || adjustRoom.getState().isBlank()) {
+            adjustRoom.setState("未处理");
+        }
+        if (adjustRoom.getApplyTime() == null || adjustRoom.getApplyTime().isBlank()) {
+            adjustRoom.setApplyTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        }
         int insert = adjustRoomMapper.insert(adjustRoom);
         return insert;
     }
