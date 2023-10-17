@@ -58,7 +58,19 @@ DormLink
 
 ### 5.2 后端配置与启动
 
-修改 [application.properties](Dormitory_business/src/main/resources/application.properties)：
+建议先复制环境变量模板：
+
+```bash
+cp .env.example .env
+```
+
+然后运行环境检查（会校验关键变量和占位密码）：
+
+```bash
+./scripts/dev.sh check-env
+```
+
+后端读取以下配置（见 [application.properties](Dormitory_business/src/main/resources/application.properties)）：
 
 - `spring.datasource.url`
 - `spring.datasource.username`
@@ -69,16 +81,26 @@ DormLink
 启动命令：
 
 ```bash
-cd Dormitory_business
-mvn spring-boot:run
+./scripts/dev.sh backend
 ```
 
 ### 5.3 前端启动
 
 ```bash
-cd vue
-npm install
-npm run serve
+./scripts/dev.sh frontend
+```
+
+### 5.4 推荐启动顺序
+
+```bash
+# 1) 启动 MySQL/Redis
+./scripts/dev.sh infra-up
+
+# 2) 启动后端
+./scripts/dev.sh backend
+
+# 3) 启动前端
+./scripts/dev.sh frontend
 ```
 
 ## 6. 数据库说明
