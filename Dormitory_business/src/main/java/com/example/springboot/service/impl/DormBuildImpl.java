@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.entity.DormBuild;
 import com.example.springboot.mapper.DormBuildMapper;
 import com.example.springboot.service.DormBuildService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,6 +28,7 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      * 楼宇添加
      */
     @Override
+    @CacheEvict(cacheNames = "buildingInfo", allEntries = true)
     public int addNewBuilding(DormBuild dormBuild) {
         int insert = dormBuildMapper.insert(dormBuild);
         return insert;
@@ -47,6 +50,7 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      * 楼宇信息更新
      */
     @Override
+    @CacheEvict(cacheNames = "buildingInfo", allEntries = true)
     public int updateNewBuilding(DormBuild dormBuild) {
         int i = dormBuildMapper.updateById(dormBuild);
         return i;
@@ -56,6 +60,7 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      * 楼宇删除
      */
     @Override
+    @CacheEvict(cacheNames = "buildingInfo", allEntries = true)
     public int deleteBuilding(Integer id) {
         int i = dormBuildMapper.deleteById(id);
         return i;
@@ -65,6 +70,7 @@ public class DormBuildImpl extends ServiceImpl<DormBuildMapper, DormBuild> imple
      * 首页 获取建筑名称
      */
     @Override
+    @Cacheable(cacheNames = "buildingInfo", key = "'all'")
     public List<DormBuild> getBuildingId() {
         QueryWrapper<DormBuild> qw = new QueryWrapper<>();
         qw.select("dormbuild_id");

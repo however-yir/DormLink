@@ -6,8 +6,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.springboot.entity.Notice;
 import com.example.springboot.mapper.NoticeMapper;
 import com.example.springboot.service.NoticeService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,6 +28,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * 公告添加
      */
     @Override
+    @CacheEvict(cacheNames = "noticeHome", allEntries = true)
     public int addNewNotice(Notice notice) {
         int insert = noticeMapper.insert(notice);
         return insert;
@@ -40,7 +42,6 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         Page page = new Page<>(pageNum, pageSize);
         QueryWrapper<Notice> qw = new QueryWrapper<>();
         qw.like("title", search);
-//        Assert.notNull(qw,"不可为空");
         Page noticePage = noticeMapper.selectPage(page, qw);
         return noticePage;
     }
@@ -49,6 +50,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * 公告更新
      */
     @Override
+    @CacheEvict(cacheNames = "noticeHome", allEntries = true)
     public int updateNewNotice(Notice notice) {
         int i = noticeMapper.updateById(notice);
         return i;
@@ -58,6 +60,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * 公告删除
      */
     @Override
+    @CacheEvict(cacheNames = "noticeHome", allEntries = true)
     public int deleteNotice(Integer id) {
         int i = noticeMapper.deleteById(id);
         return i;
@@ -67,6 +70,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
      * 首页公告展示
      */
     @Override
+    @Cacheable(cacheNames = "noticeHome", key = "'latest'")
     public List<?> homePageNotice() {
         QueryWrapper<Notice> qw = new QueryWrapper<>();
         qw.orderByDesc("release_time");
