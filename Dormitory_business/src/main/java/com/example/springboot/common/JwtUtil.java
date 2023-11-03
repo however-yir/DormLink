@@ -3,13 +3,12 @@ package com.example.springboot.common;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,14 +16,12 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    @Value("${security.jwt.secret:DormLinkJwtSecretKey-2023-Interview-Hardening-ChangeMe!}")
-    private String jwtSecret;
+    private final SecretKey secretKey;
+    private final long expirationSeconds;
 
-    @Value("${security.jwt.expiration-ms:86400000}")
-    private long jwtExpirationMs;
-
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    public JwtUtil(JwtProperties jwtProperties) {
+        this.secretKey = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
+        this.expirationSeconds = jwtProperties.getExpirationSeconds();
     }
 
     public String generateToken(String username, String role, String userId, String displayName, String avatar) {
@@ -34,14 +31,14 @@ public class JwtUtil {
         claims.put("displayName", displayName);
         claims.put("avatar", avatar);
 
-        Date now = new Date();
-        Date expiration = new Date(now.getTime() + jwtExpirationMs);
+        Instant now = Instant.now();
+        Instant expiration = now.plusSeconds(expirationSeconds);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expiration)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expiration))
+                .signWith(secretKey)
                 .compact();
     }
 
@@ -79,7 +76,7 @@ public class JwtUtil {
 
     private Claims getClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

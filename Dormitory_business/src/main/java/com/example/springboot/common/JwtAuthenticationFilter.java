@@ -1,13 +1,22 @@
 package com.example.springboot.common;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
 
 @Component
-public class JwtAuthenticationFilter implements HandlerInterceptor {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
@@ -16,34 +25,40 @@ public class JwtAuthenticationFilter implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            return true;
-        }
-
-        String authorization = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-            unauthorized(response, "未授权，请先登录");
-            return false;
+            filterChain.doFilter(request, response);
+            return;
         }
 
         String token = authorization.substring(7).trim();
         if (!jwtUtil.validateToken(token)) {
-            unauthorized(response, "Token 无效或已过期");
-            return false;
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        request.setAttribute("username", jwtUtil.getUsernameFromToken(token));
-        request.setAttribute("role", jwtUtil.getRoleFromToken(token));
-        request.setAttribute("userId", jwtUtil.getUserIdFromToken(token));
-        request.setAttribute("displayName", jwtUtil.getDisplayNameFromToken(token));
-        request.setAttribute("avatar", jwtUtil.getAvatarFromToken(token));
-        return true;
-    }
+        String username = jwtUtil.getUsernameFromToken(token);
+        String role = jwtUtil.getRoleFromToken(token);
+        String userId = jwtUtil.getUserIdFromToken(token);
+        String displayName = jwtUtil.getDisplayNameFromToken(token);
+        String avatar = jwtUtil.getAvatarFromToken(token);
 
-    private void unauthorized(HttpServletResponse response, String message) throws Exception {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write("{\"code\":\"401\",\"msg\":\"" + message + "\"}");
+        String normalizedRole = role == null ? "USER" : role.toUpperCase();
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                username,
+                null,
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + normalizedRole))
+        );
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        request.setAttribute("username", username);
+        request.setAttribute("role", role);
+        request.setAttribute("userId", userId);
+        request.setAttribute("displayName", displayName);
+        request.setAttribute("avatar", avatar);
+        filterChain.doFilter(request, response);
     }
 }

@@ -1,5 +1,8 @@
 package com.example.springboot.controller;
 
+import com.example.springboot.common.JwtAuthenticationFilter;
+import com.example.springboot.common.JwtUtil;
+import com.example.springboot.common.SecurityConfig;
 import com.example.springboot.entity.Repair;
 import com.example.springboot.mapper.AdminMapper;
 import com.example.springboot.mapper.AdjustRoomMapper;
@@ -16,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(RepairController.class)
+@Import({SecurityConfig.class, JwtAuthenticationFilter.class})
 class RepairControllerTest {
 
     @Autowired
@@ -38,7 +43,7 @@ class RepairControllerTest {
     private RepairService repairService;
 
     @MockBean
-    private com.example.springboot.common.JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @MockBean
     private AdminMapper adminMapper;

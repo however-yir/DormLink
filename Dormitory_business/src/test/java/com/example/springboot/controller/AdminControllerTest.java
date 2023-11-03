@@ -1,6 +1,8 @@
 package com.example.springboot.controller;
 
+import com.example.springboot.common.JwtAuthenticationFilter;
 import com.example.springboot.common.JwtUtil;
+import com.example.springboot.common.SecurityConfig;
 import com.example.springboot.entity.Admin;
 import com.example.springboot.mapper.AdminMapper;
 import com.example.springboot.mapper.AdjustRoomMapper;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -27,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminController.class)
+@Import({SecurityConfig.class, JwtAuthenticationFilter.class})
 class AdminControllerTest {
 
     @Autowired
