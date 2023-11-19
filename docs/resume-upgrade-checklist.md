@@ -13,14 +13,14 @@
 - [x] 新增 CI（GitHub Actions）
 - [x] 补齐 `db/init.sql`（建表 + 种子数据）
 - [x] 增加离线 KPI 评估脚本（`scripts/evaluation/repair_metrics.py`）
-- [ ] Spring Security + JWT
+- [x] JWT 鉴权改造（`JwtUtil` + `JwtAuthenticationFilter` + `WebConfig`）
 - [ ] 审计日志
 - [ ] 导出报表能力
 
 ## 3. README
 - [x] 增加改造清单入口
 - [ ] 补角色权限图
-- [ ] 补入住/调宿/报修流程图
+- [x] 补入住/调宿/报修流程图
 - [ ] 补宿舍资源模型说明
 - [ ] 补前后端联调步骤
 
@@ -30,4 +30,5 @@
 - [x] 调宿申请手动状态/时间保留测试
 - [ ] 调宿一致性测试
 - [x] 报修状态流转测试
-- [ ] 权限访问测试
+- [x] Controller 层接口测试（`@WebMvcTest`）
+- [x] JWT 工具类单元测试

@@ -228,6 +228,8 @@ mvn -B -ntp test
 - 调宿重复申请拦截
 - 调宿默认字段补全与手动字段保留
 - 报修状态流转一致性（默认值、完成时间补全、时间顺序校验）
+- JWT 工具类生成/解析能力校验
+- Controller 层接口测试（`@WebMvcTest`）
 
 ### 8.2 离线 KPI 评估（样例）
 
@@ -251,6 +253,7 @@ python3 scripts/evaluation/repair_metrics.py
 
 - 改造清单：`docs/resume-upgrade-checklist.md`
 - 业务流程图：`docs/business-flows.md`
+- 量化指标路径：`docs/quantitative-metrics.md`
 - 活动记录：`project-management/2026Q2_ACTIVITY_LOG.md`
 - 评估样例：`evaluation/repair_kpi_dataset.sample.json`
 
@@ -258,7 +261,7 @@ python3 scripts/evaluation/repair_metrics.py
 
 ## 10. 已知问题与优化方向
 
-- 接入 Spring Security + JWT，替代当前轻量登录方案
+- 进一步引入 Spring Security RBAC，细化接口级权限策略
 - 增加权限访问与异常分支集成测试
 - 增加审计日志（关键审批操作留痕）
 - 增加报修评价闭环（评分与文本反馈）

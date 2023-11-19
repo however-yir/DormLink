@@ -4,13 +4,26 @@ on:
   push:
     branches: ["main"]
   pull_request:
+    branches: ["main"]
 
 jobs:
-  backend-test:
+  build-and-test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Dormitory_business
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wms
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,12 +32,38 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '11'
+          java-version: "11"
           cache: maven
 
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            mysqladmin ping -h 127.0.0.1 -uroot -proot && break
+            sleep 2
+          done
+
+      - name: Initialize schema and seed data
+        run: |
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE IF NOT EXISTS wms;"
+          mysql -h 127.0.0.1 -uroot -proot wms < db/init.sql
+
+      - name: Build backend
+        run: |
+          cd Dormitory_business
+          mvn -B -ntp clean package -DskipTests
+
       - name: Run tests
-        run: mvn -B -ntp test
+        run: |
+          cd Dormitory_business
+          mvn -B -ntp test
 
       - name: Run repair KPI evaluation script
-        working-directory: .
-        run: python3 scripts/evaluation/repair_metrics.py
+        run: |
+          python3 scripts/evaluation/repair_metrics.py
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: Dormitory_business/target/surefire-reports/
