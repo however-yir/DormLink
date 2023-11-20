@@ -1,6 +1,27 @@
 # DormLink Business Flows
 
-## 1. Repair Workflow
+## 0. Multi-Role Closed-Loop Overview
+
+- Student: submit check-in, room adjustment, and repair requests.
+- Dorm manager: review requests and process tickets.
+- System: enforce state transitions and persist timestamps.
+
+## 1. Check-In Workflow
+
+```mermaid
+flowchart TD
+  A[Student submits check-in request] --> B{Required identity and room info valid?}
+  B -- No --> X[Reject request]
+  B -- Yes --> C[Create record with state=待审核]
+  C --> D[Dorm manager reviews materials]
+  D --> E{Approve?}
+  E -- No --> F[Set state=驳回 and record reason]
+  E -- Yes --> G[Allocate room and bed]
+  G --> H[Set state=已入住 and checkin_time]
+  H --> I[Notify student and archive process]
+```
+
+## 2. Repair Workflow
 
 ```mermaid
 flowchart TD
@@ -18,7 +39,7 @@ flowchart TD
   J -- Yes --> K[Persist update]
 ```
 
-## 2. Room Adjustment Workflow
+## 3. Room Adjustment Workflow
 
 ```mermaid
 flowchart TD
