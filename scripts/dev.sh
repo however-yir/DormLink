@@ -14,6 +14,7 @@ Commands:
   infra-down  Stop MySQL + Redis
   backend     Run Spring Boot backend
   frontend    Run Vue frontend
+  eval-repair Run offline repair KPI metrics script
   all         check-env + infra-up + print startup order
 EOF
 }
@@ -72,6 +73,11 @@ frontend() {
   npm run serve
 }
 
+eval_repair() {
+  cd "$ROOT_DIR"
+  python3 ./scripts/evaluation/repair_metrics.py
+}
+
 all() {
   check_env
   infra_up
@@ -89,6 +95,7 @@ case "${1:-}" in
   infra-down) infra_down ;;
   backend) backend ;;
   frontend) frontend ;;
+  eval-repair) eval_repair ;;
   all) all ;;
   *) usage; exit 1 ;;
 esac

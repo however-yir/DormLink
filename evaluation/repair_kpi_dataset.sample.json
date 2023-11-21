@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "state": "完成",
+    "reported_at": "2026-03-28 09:10:00",
+    "finished_at": "2026-03-28 13:30:00",
+    "sla_hours": 8,
+    "feedback_score": 5
+  },
+  {
+    "id": 2,
+    "state": "完成",
+    "reported_at": "2026-03-28 14:20:00",
+    "finished_at": "2026-03-29 08:40:00",
+    "sla_hours": 24,
+    "feedback_score": 4
+  },
+  {
+    "id": 3,
+    "state": "完成",
+    "reported_at": "2026-03-29 10:00:00",
+    "finished_at": "2026-03-30 15:00:00",
+    "sla_hours": 24,
+    "feedback_score": 3
+  },
+  {
+    "id": 4,
+    "state": "未完成",
+    "reported_at": "2026-03-30 11:35:00",
+    "finished_at": null,
+    "sla_hours": 12,
+    "feedback_score": null
+  },
+  {
+    "id": 5,
+    "state": "完成",
+    "reported_at": "2026-03-30 19:20:00",
+    "finished_at": "2026-03-30 22:00:00",
+    "sla_hours": 8,
+    "feedback_score": 5
+  },
+  {
+    "id": 6,
+    "state": "未完成",
+    "reported_at": "2026-03-31 08:00:00",
+    "finished_at": null,
+    "sla_hours": 6,
+    "feedback_score": null
+  },
+  {
+    "id": 7,
+    "state": "完成",
+    "reported_at": "2026-03-31 09:10:00",
+    "finished_at": "2026-03-31 12:10:00",
+    "sla_hours": 8,
+    "feedback_score": 4
+  },
+  {
+    "id": 8,
+    "state": "未完成",
+    "reported_at": "2026-03-31 22:30:00",
+    "finished_at": null,
+    "sla_hours": 4,
+    "feedback_score": null
+  }
+]

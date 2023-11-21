@@ -24,3 +24,7 @@ jobs:
 
       - name: Run tests
         run: mvn -B -ntp test
+
+      - name: Run repair KPI evaluation script
+        working-directory: .
+        run: python3 scripts/evaluation/repair_metrics.py
