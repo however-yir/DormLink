@@ -11,6 +11,8 @@
 - [x] 新增 `.env.example`
 - [x] 新增 `docker-compose.dev.yml`（MySQL + Redis）
 - [x] 新增 CI（GitHub Actions）
+- [x] 补齐 `db/init.sql`（建表 + 种子数据）
+- [x] 增加离线 KPI 评估脚本（`scripts/evaluation/repair_metrics.py`）
 - [ ] Spring Security + JWT
 - [ ] 审计日志
 - [ ] 导出报表能力
@@ -25,6 +27,7 @@
 ## 4. 测试
 - [x] 调宿重复申请测试
 - [x] 调宿申请默认字段测试
+- [x] 调宿申请手动状态/时间保留测试
 - [ ] 调宿一致性测试
-- [ ] 报修状态流转测试
+- [x] 报修状态流转测试
 - [ ] 权限访问测试
