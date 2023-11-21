@@ -51,4 +51,22 @@ class AdjustRoomServiceImplTest {
         Assertions.assertNotNull(adjustRoom.getApplyTime());
         Assertions.assertFalse(adjustRoom.getApplyTime().isBlank());
     }
+
+    @Test
+    void shouldKeepProvidedStateAndApplyTime() {
+        AdjustRoom adjustRoom = new AdjustRoom();
+        adjustRoom.setUsername("stu001");
+        adjustRoom.setCurrentRoomId(101);
+        adjustRoom.setTowardsRoomId(202);
+        adjustRoom.setState("驳回");
+        adjustRoom.setApplyTime("2025-01-03 09:00:00");
+
+        when(adjustRoomMapper.selectCount(any())).thenReturn(0L);
+        when(adjustRoomMapper.insert(any(AdjustRoom.class))).thenReturn(1);
+
+        int result = adjustRoomService.addApply(adjustRoom);
+        Assertions.assertEquals(1, result);
+        Assertions.assertEquals("驳回", adjustRoom.getState());
+        Assertions.assertEquals("2025-01-03 09:00:00", adjustRoom.getApplyTime());
+    }
 }
