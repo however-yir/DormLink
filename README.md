@@ -1,89 +1,118 @@
-## DormitorySystem
+# DormLink
 
-#### 1、项目介绍
+> 面向宿舍管理场景的前后端分离系统，后端基于 Spring Boot + MyBatis-Plus，前端基于 Vue3 + Element Plus，支持管理员/宿管/学生三类角色。
 
-该系统拥有三种用户类型：
+## 1. 项目定位
 
-:older_man:
+`DormLink` 用于宿舍业务流程数字化管理，覆盖学生住宿、宿舍楼与房间、报修、调宿、访客、公告等核心场景。
 
-1. 系统管理员
-   * 管理员：查看当前宿舍学生人数、住宿人数、报修数量、空舍数量、查看学生信息、宿管信息、查看楼宇信息、查看公告信息、查看房间信息、查看报修信息、查看调寝信息、访客管理、查看所有用户信息
+## 2. 已实现功能
 
-:woman:
+- 三角色登录：管理员、宿管、学生
+- 学生管理、宿管管理、宿舍楼管理、房间管理
+- 公告管理
+- 报修申请与处理
+- 调宿申请与处理
+- 访客登记管理
+- 首页统计与可视化组件（ECharts、天气、日历等）
+- 头像与文件上传接口
 
-1. 宿舍管理员
-   * 宿舍管理员：查看当前宿舍学生人数、住宿人数、报修数量、空舍数量、查看学生信息、查看楼宇信息、查看公告信息、查看房间信息、查看报修信息、查看调寝信息、访客管理、查看个人信息
+## 3. 技术栈
 
-:baby:
+- 后端：Spring Boot 2.6.3、MyBatis-Plus、MySQL
+- 前端：Vue 3、Vue Router、Vuex、Element Plus、Axios、ECharts
+- Java 版本：11
 
-1. 学生
-   * 查看当前宿舍学生人数、住宿人数、报修数量、空舍数量、查看我的宿舍、申请调宿、申请报修、查看个人信息
+## 4. 项目结构
 
-#### 2、开发工具
+```text
+DormLink
+├── Dormitory_business/                 # 后端工程
+│   ├── src/main/java/com/example/springboot
+│   │   ├── controller/                 # admin/stu/dormManager/room/... 接口
+│   │   ├── service/
+│   │   ├── mapper/
+│   │   ├── entity/
+│   │   └── common/
+│   └── src/main/resources/application.properties
+├── vue/                                # 前端工程
+│   ├── src/views/
+│   ├── src/components/
+│   ├── src/router/
+│   └── package.json
+└── doc/img/                            # 演示图片
+```
 
-​	后端：idea   
-​	前端：vscode
+## 5. 本地运行
 
-#### 3、项目技术
+### 5.1 环境准备
 
-​	后端框架：Springboot、MybatisPlus
-​	前端技术：ElementUI、vue、css、JavaScript、axios
+- JDK 11
+- Maven 3.8+
+- Node.js 16+
+- MySQL 8.x
 
-#### 4、环境
+### 5.2 后端配置与启动
 
-jdk11、maven、node、mysql
+修改 [application.properties](/Users/liuzhuoran/Documents/Playground/readme-batch/DormLink/Dormitory_business/src/main/resources/application.properties)：
 
-#### 5、硬件环境
+- `spring.datasource.url`
+- `spring.datasource.username`
+- `spring.datasource.password`
 
-Windows 或者 Mac OS(不挑剔)
+默认端口：`9090`
 
-### 配置
+启动命令：
 
+```bash
+cd Dormitory_business
+mvn spring-boot:run
+```
 
-1.修改 application.properties文件
+### 5.3 前端启动
 
-![image-20230606103746253](/doc/img/application.properties文件.png)
+```bash
+cd vue
+npm install
+npm run serve
+```
 
-2.**进入vue  使用控制台打开**   npm install  而后 npm run serve 启动前端
+## 6. 数据库说明
 
-3.启动 SpringbootApplication
+后端默认连接数据库：`wms`。
 
-4.用户名或密码在数据库中查看三个用户三个表
+说明：仓库中未附带完整 `.sql` 初始化脚本，需根据后端实体与 Mapper 自行建库建表，或从历史环境导入结构数据。
 
-### 运行效果
+## 7. 关键接口分组（示例）
 
-图片也在doc --》》》 img中
+- 登录：`/admin/login`、`/stu/login`、`/dormManager/login`
+- 学生：`/stu/*`
+- 宿管：`/dormManager/*`
+- 房间与楼栋：`/room/*`、`/building/*`
+- 报修与调宿：`/repair/*`、`/adjustRoom/*`
+- 公告与访客：`/notice/*`、`/visitor/*`
 
-##### 个人中心
+## 8. 常见问题
 
-![个人中心](/doc/img/个人中心.png)
+- 前端请求失败：确认后端 `9090` 端口已启动，且跨域配置有效
+- 登录无数据：先确认数据库已有角色用户数据
+- 上传头像失败：检查后端文件目录权限与路径配置
 
-##### 管理员主页
+## 9. 开发建议
 
-ECharts 可视化
+- 补充数据库初始化脚本并纳入版本管理
+- 增加接口鉴权 token 方案（当前以 session 为主）
+- 增加单元测试与端到端测试
 
-天气组件
+## 12.1 贡献建议
 
-日历组件
+欢迎通过 Issue / PR 提交：
 
-![管理员主页](/doc/img/管理员主页.png)
+- SQL 初始化脚本与测试数据
+- 前端页面优化与交互增强
+- 业务规则完善（床位分配、审批流）
+- 部署文档与运维脚本补充
 
-##### 房间分配
+## 12.2 许可说明
 
-![房间分配](/doc/img/房间分配.png)
-
-##### 公告管理
-
-**![公告管理](/doc/img/公告管理.png)**
-
-##### 报修管理
-
-![报修管理](/doc/img/报修管理.png)
-
-##### 调宿申请
-
-![调宿申请](/doc/img/调宿申请.png)
-
-##### 访客管理
-
-![访客管理](/doc/img/访客管理.png)
+本仓库采用 MIT License，详见 [LICENSE](/Users/liuzhuoran/Documents/Playground/readme-batch/DormLink/LICENSE)。
