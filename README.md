@@ -1,5 +1,9 @@
 # DormLink
 
+🔥 A dormitory management system based on Spring Boot, Vue3, Element Plus, and MyBatis-Plus.  
+🚀 Built for multi-role campus workflows including rooms, repairs, transfers, visitors, and announcements.  
+⭐ Supports admin, dorm manager, and student operations with statistics and visualization modules.
+
 > 面向宿舍管理场景的前后端分离系统，后端基于 Spring Boot + MyBatis-Plus，前端基于 Vue3 + Element Plus，支持管理员/宿管/学生三类角色。
 
 ## 1. 项目定位
