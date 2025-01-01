@@ -159,3 +159,12 @@ npm run serve
 ## 12.2 许可说明
 
 本仓库采用 MIT License，详见 [LICENSE](/Users/liuzhuoran/Documents/Playground/readme-batch/DormLink/LICENSE)。
+
+## 简历改造清单
+
+- 追踪文件：[docs/resume-upgrade-checklist.md](/Users/liuzhuoran/Documents/Playground/DormLink/docs/resume-upgrade-checklist.md)
+- 环境模板：[.env.example](/Users/liuzhuoran/Documents/Playground/DormLink/.env.example)
+- 开发 compose：[docker-compose.dev.yml](/Users/liuzhuoran/Documents/Playground/DormLink/docker-compose.dev.yml)
+- CI 配置：[.github/workflows/ci.yml](/Users/liuzhuoran/Documents/Playground/DormLink/.github/workflows/ci.yml)
+
+本轮已落地：调宿申请幂等保护 + 默认状态/时间补全 + 对应单元测试。

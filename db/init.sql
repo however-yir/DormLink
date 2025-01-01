@@ -1,0 +1,2 @@
+-- DormLink bootstrap SQL placeholder.
+-- TODO: import dormitory schema and seed demo users.
