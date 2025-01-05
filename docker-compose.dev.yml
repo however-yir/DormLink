@@ -4,7 +4,7 @@ services:
     image: mysql:8.0
     container_name: dormlink-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-12345678}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-change_me_root_password}
       MYSQL_DATABASE: wms
     ports:
       - "3308:3306"
