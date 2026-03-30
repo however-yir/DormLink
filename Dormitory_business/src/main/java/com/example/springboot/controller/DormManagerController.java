@@ -5,6 +5,8 @@ import com.example.springboot.common.Result;
 import com.example.springboot.entity.DormManager;
 import com.example.springboot.entity.User;
 import com.example.springboot.service.DormManagerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/dormManager")
 public class DormManagerController {
+    private static final Logger log = LoggerFactory.getLogger(DormManagerController.class);
 
     @Resource
     private DormManagerService dormManagerService;
@@ -78,7 +81,7 @@ public class DormManagerController {
     public Result<?> login(@RequestBody User user, HttpSession session) {
         Object o = dormManagerService.dormManagerLogin(user.getUsername(), user.getPassword());
         if (o != null) {
-            System.out.println(o);
+            log.info("Dorm manager login succeeded");
             //存入session
             session.setAttribute("Identity", "dormManager");
             session.setAttribute("User", o);

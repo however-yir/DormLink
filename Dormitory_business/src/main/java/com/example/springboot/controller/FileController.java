@@ -9,6 +9,8 @@ import com.example.springboot.entity.Student;
 import com.example.springboot.service.AdminService;
 import com.example.springboot.service.DormManagerService;
 import com.example.springboot.service.StudentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +25,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/files")
 public class FileController {
+    private static final Logger log = LoggerFactory.getLogger(FileController.class);
 
     private static final String ip = "http://localhost";
     static String rootFilePath = System.getProperty("user.dir") + "/src/main/resources/files/";
@@ -44,17 +47,16 @@ public class FileController {
     public Result<?> upload(MultipartFile file) throws IOException {
         //获取文件名
         originalFilename = file.getOriginalFilename();
-        System.out.println(originalFilename);
+        log.debug("Upload start originalFilename={}", originalFilename);
         //获取文件尾缀
         String fileType = originalFilename.substring(originalFilename.lastIndexOf("."), originalFilename.length());
 
         //重命名
         String uid = new UID().produceUID();
         originalFilename = uid + fileType;
-        System.out.println(originalFilename);
         //存储位置
         String targetPath = rootFilePath + originalFilename;
-        System.out.println(targetPath);
+        log.debug("Upload target prepared filename={} path={}", originalFilename, targetPath);
         //获取字节流
         FileUtil.writeBytes(file.getBytes(), targetPath);
 
@@ -68,7 +70,7 @@ public class FileController {
     public Result<?> uploadStuAvatar(@RequestBody Student student) {
         if (originalFilename != null) {
             student.setAvatar(originalFilename);
-            System.out.println(student);
+            log.info("Student avatar updated");
             int i = studentService.updateNewStudent(student);
             if (i == 1) {
                 return Result.success(originalFilename);
@@ -112,9 +114,8 @@ public class FileController {
      */
     @GetMapping("/initAvatar/{filename}")
     public Result<?> initAvatar(@PathVariable String filename) throws IOException {
-        System.out.println(filename);
         String path = rootFilePath + filename;
-        System.out.println(path);
+        log.debug("Init avatar filename={} path={}", filename, path);
         return Result.success(getImage(path));
     }
 

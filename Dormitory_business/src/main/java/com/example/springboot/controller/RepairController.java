@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.Repair;
 import com.example.springboot.service.RepairService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -11,6 +13,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/repair")
 public class RepairController {
+    private static final Logger log = LoggerFactory.getLogger(RepairController.class);
 
     @Resource
     private RepairService repairService;
@@ -77,7 +80,7 @@ public class RepairController {
                                     @RequestParam(defaultValue = "10") Integer pageSize,
                                     @RequestParam(defaultValue = "") String search,
                                     @PathVariable String name) {
-        System.out.println(name);
+        log.debug("Repair list query user={}", name);
         Page page = repairService.individualFind(pageNum, pageSize, search, name);
         if (page != null) {
             return Result.success(page);
