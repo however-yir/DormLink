@@ -30,7 +30,7 @@ public class AdjustRoomController {
         if (result == 1) {
             return Result.success();
         } else {
-            return Result.error("-1", "查询失败");
+            return Result.error("-1", "提交失败，可能存在重复未处理申请");
         }
     }
 
