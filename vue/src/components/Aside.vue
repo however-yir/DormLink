@@ -2,11 +2,15 @@
   <el-menu
       :default-active="this.path"
       router
-      style="width: 200px; height:100%; min-height: calc(100vh - 40px)"
+      class="nav-menu"
       unique-opened
   >
-    <div style="display: flex;align-items: center;justify-content: center;padding: 11px 0;">
-      <img alt="" src="@/assets/logo.png" style="width: 60px;">
+    <div class="brand-block">
+      <img alt="" class="brand-logo" src="@/assets/logo.png">
+      <div class="brand-copy">
+        <span class="brand-title">DormLink</span>
+        <span class="brand-subtitle">校园宿舍系统</span>
+      </div>
     </div>
     <el-menu-item index="/home">
       <el-icon>
@@ -148,14 +152,92 @@ export default {
 </script>
 
 <style scoped>
+.nav-menu {
+  width: 220px;
+  height: 100%;
+  min-height: 100vh;
+  border-right: 0;
+  background: transparent;
+}
+
+.nav-menu :deep(.el-menu-item),
+.nav-menu :deep(.el-sub-menu__title) {
+  color: rgba(237, 245, 255, 0.86);
+  border-radius: 10px;
+  margin: 4px 10px;
+  height: 46px;
+  line-height: 46px;
+}
+
+.nav-menu :deep(.el-sub-menu .el-menu-item) {
+  margin: 2px 10px;
+  min-width: 180px;
+  height: 42px;
+  line-height: 42px;
+  padding-left: 58px !important;
+}
+
+.nav-menu :deep(.el-menu) {
+  background: transparent;
+  border-right: 0;
+}
+
+.nav-menu :deep(.el-menu-item:hover),
+.nav-menu :deep(.el-sub-menu__title:hover) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.nav-menu :deep(.el-menu-item.is-active) {
+  color: #fff;
+  background: linear-gradient(120deg, rgba(48, 135, 255, 0.9), rgba(67, 202, 255, 0.85));
+  box-shadow: 0 8px 18px rgba(44, 136, 255, 0.3);
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 14px 12px;
+  margin-bottom: 10px;
+}
+
+.brand-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6px;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  color: rgba(221, 236, 255, 0.82);
+}
+
 .icon {
   margin-right: 6px;
 }
 
-.el-sub-menu .el-menu-item {
-  height: 50px;
-  line-height: 50px;
-  padding: 0 45px;
-  min-width: 199px;
+@media (max-width: 960px) {
+  .nav-menu {
+    width: 76px;
+  }
+
+  .brand-copy {
+    display: none;
+  }
 }
 </style>
